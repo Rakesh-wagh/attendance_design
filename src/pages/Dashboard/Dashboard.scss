@@ -1,0 +1,48 @@
+.dashboard {
+  .dashboard_tab {
+    position: relative;
+    z-index: 0;
+    .dashboard_tab_list {
+      padding-left: 0;
+      margin-bottom: 0;
+      display: flex;
+      list-style: none;
+      gap: 3px;
+
+      .react-tabs__tab {
+        padding: 16px 20px;
+        font-size: 1.357rem;
+        background-color: #f9fafd;
+        border-top: 4px solid #f9fafd;
+        color: #495057;
+        font-weight: 500;
+        border-radius: 6px 6px 0px 0px;
+        line-height: 1;
+        cursor: pointer;
+        @media (max-width: 480px) {
+          font-size: 1.143rem;
+        }
+        &.react-tabs__tab--selected {
+          border-color: var(--secondary);
+          background-color: #fff;
+        }
+        &:focus-visible {
+          outline: none;
+        }
+      }
+    }
+    .react-tabs__tab-panel {
+      background-color: #fff;
+      box-shadow: 4px 3px 5px -2px rgba(65, 69, 88, 0.1);
+      border-radius: 0px 6px 6px 6px;
+      margin-bottom: 1rem;
+      min-height: calc(100vh - 220px);
+      display: none;
+      &.react-tabs__tab-panel--selected {
+        display: block;
+        position: relative;
+        z-index: 1;
+      }
+    }
+  }
+}
