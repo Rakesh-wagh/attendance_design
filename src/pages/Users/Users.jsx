@@ -1,28 +1,20 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Breadcrumb, Button, Layout, Modal } from "antd";
-import React, { useRef, useState } from "react";
+import { Breadcrumb, Button, Layout } from "antd";
+import React from "react";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import "./Users.scss";
 import { Userlist } from "../Users/Component/Userlist";
+import { CreateUser } from "./Component/UpsertUser/UpsertUser";
+import { ViewUser } from "./Component/ViewProfile/ViewProfile";
+import { EditProfile } from "./Component/EditProfile/EditProfile";
+
 const { Content } = Layout;
 
 export const Users = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const modalFormRef = useRef(null);
+  const navigate = useNavigate();
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    modalFormRef.current.submit();
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const viewProfile = (record) => {
-    console.log("View profile of", record);
+  const showCreateUser = () => {
+    navigate("/users/create");
   };
 
   return (
@@ -30,34 +22,35 @@ export const Users = () => {
       <Breadcrumb
         items={[
           {
-            title: "Home",
+            title: <Link to="/users">Home</Link>,
           },
           {
-            title: <a href="">Application Center</a>,
+            title: <Link to="create">Create</Link>,
           },
           {
-            title: <a href="">Application List</a>,
+            title: <Link to="view/:id">View Profile</Link>,
           },
           {
-            title: "An Application",
+            title: <Link to="edit/:id">Edit Profile</Link>,
           },
         ]}
       />
       <Content className="content">
         <div className="users-header">
-          <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={showCreateUser}
+          >
             Create User
           </Button>
         </div>
-        <Userlist />
-        <Modal
-          title="Create User"
-          visible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          okText="Create"
-          destroyOnClose={true}
-        ></Modal>
+        <Routes>
+          <Route path="/" element={<Userlist />} />
+          <Route path="create" element={<CreateUser />} />
+          <Route path="view/:id" element={<ViewUser />} />
+          <Route path="edit/:id" element={<EditProfile />} />
+        </Routes>
       </Content>
     </div>
   );

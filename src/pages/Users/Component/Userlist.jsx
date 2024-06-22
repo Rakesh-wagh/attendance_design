@@ -1,8 +1,29 @@
 import { Table } from "antd";
-import React from "react";
-import { EyeOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { EyeOutlined, EditOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 export const Userlist = () => {
+  const [data, setData] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("/users.json")
+      .then((response) => response.json())
+      .then((data) => {
+        const formattedData = data.map((item) => ({ ...item, key: item.id }));
+        setData(formattedData);
+      });
+  }, []);
+
+  const viewProfile = (record) => {
+    navigate(`/users/view/${record.key}`);
+  };
+
+  const editProfile = (record) => {
+    navigate(`/users/edit/${record.key}`);
+  };
+
   const columns = [
     {
       title: "Name",
@@ -21,43 +42,19 @@ export const Userlist = () => {
       title: "Action",
       dataIndex: "action",
       render: (_, record) => (
-        <EyeOutlined
-          onClick={() => viewProfile(record)}
-          style={{ cursor: "pointer" }}
-        />
+        <span>
+          <EyeOutlined
+            onClick={() => viewProfile(record)}
+            style={{ cursor: "pointer", marginRight: 16 }}
+          />
+          <EditOutlined
+            onClick={() => editProfile(record)}
+            style={{ cursor: "pointer" }}
+          />
+        </span>
       ),
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      name: "John Brown",
-      email: "john@gmail.com",
-      phone: "8574854585",
-    },
-    {
-      key: "2",
-      name: "Jim Green",
-      email: "john@gmail.com",
-      phone: "8574854585",
-    },
-    {
-      key: "3",
-      name: "Joe Black",
-      email: "john@gmail.com",
-      phone: "8574854585",
-    },
-    {
-      key: "4",
-      name: "Disabled User",
-      email: "john@gmail.com",
-      phone: "8574854585",
-    },
-  ];
-  return (
-    <>
-      <Table columns={columns} dataSource={data} />
-    </>
-  );
+  return <Table columns={columns} dataSource={data} />;
 };
